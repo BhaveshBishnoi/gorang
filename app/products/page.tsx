@@ -14,7 +14,6 @@ import {
   List,
   Search,
   ArrowUpDown,
-  
   Package,
   Leaf,
 } from "lucide-react";
@@ -39,7 +38,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import GrowingPlantLoader from "@/components/ui/GrowingPlantLoader";
-import { useToast } from "@/hooks/use-toast";
+import useToast from "@/hooks/use-toast";
 
 interface Product {
   id: string;
@@ -125,8 +124,8 @@ export default function ProductsPage() {
         const data = await response.json();
         setProducts(data.products || []);
       }
-    } catch (error) {
-      toast({
+    } catch {
+      toast.toast({
         title: "Error",
         description: "Failed to load products",
         variant: "destructive",
@@ -150,7 +149,7 @@ export default function ProductsPage() {
 
   const addToWishlist = async (productId: string) => {
     if (!session) {
-      toast({
+      toast.toast({
         title: "Login Required",
         description: "Please login to add items to wishlist",
         variant: "destructive",
@@ -166,13 +165,13 @@ export default function ProductsPage() {
       });
 
       if (response.ok) {
-        toast({
+        toast.toast({
           title: "Added to Wishlist",
           description: "Product added to your wishlist",
         });
       }
     } catch {
-      toast({
+      toast.toast({
         title: "Error",
         description: "Failed to add to wishlist",
         variant: "destructive",
@@ -182,7 +181,7 @@ export default function ProductsPage() {
 
   const addToCart = async (productId: string) => {
     if (!session) {
-      toast({
+      toast.toast({
         title: "Login Required",
         description: "Please login to add items to cart",
         variant: "destructive",
@@ -198,13 +197,13 @@ export default function ProductsPage() {
       });
 
       if (response.ok) {
-        toast({
+        toast.toast({
           title: "Added to Cart",
           description: "Product added to your cart",
         });
       }
     } catch {
-      toast({
+      toast.toast({
         title: "Error",
         description: "Failed to add to cart",
         variant: "destructive",
@@ -295,7 +294,7 @@ export default function ProductsPage() {
           <Checkbox
             id="inStock"
             checked={inStock}
-            onCheckedChange={setInStock}
+            onCheckedChange={(checked) => setInStock(checked === true)}
           />
           <label htmlFor="inStock" className="text-sm cursor-pointer">
             In Stock Only
@@ -305,7 +304,7 @@ export default function ProductsPage() {
           <Checkbox
             id="featured"
             checked={featuredOnly}
-            onCheckedChange={setFeaturedOnly}
+            onCheckedChange={(checked) => setFeaturedOnly(checked === true)}
           />
           <label htmlFor="featured" className="text-sm cursor-pointer">
             Featured Products

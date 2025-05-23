@@ -1,85 +1,106 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // app/api/user/profile/route.ts
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        name: true,
-        email: true,
-        phone: true,
-        dateOfBirth: true,
-        image: true,
-        createdAt: true,
-        updatedAt: true,
+      include: {
+        addresses: {
+          orderBy: { isDefault: "desc" },
+        },
+        _count: {
+          select: {
+            orders: true,
+            testimonials: true,
+          },
+        },
       },
     });
 
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(user, { status: 200 });
+    // Remove sensitive information
+    const { password, ...safeUser } = user;
+
+    return NextResponse.json({
+      success: true,
+      user: safeUser,
+    });
   } catch (error) {
     console.error("Get profile error:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { error: error || "Something went wrong" },
       { status: 500 }
     );
   }
 }
 
-export async function PUT(request: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
+export async function PATCH(request: NextRequest) {
   try {
-    const { firstName, lastName, phone, dateOfBirth } = await request.json();
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { firstName, lastName, phone, dateOfBirth } = body;
+
+    // Validate input
+    if (!firstName || !lastName) {
+      return NextResponse.json(
+        { error: "First name and last name are required" },
+        { status: 400 }
+      );
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
       data: {
         firstName,
         lastName,
-        name: firstName && lastName ? `${firstName} ${lastName}` : undefined,
-        phone,
-        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+        phone: phone || undefined,
+        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        name: true,
-        email: true,
-        phone: true,
-        dateOfBirth: true,
-        image: true,
-        createdAt: true,
-        updatedAt: true,
+      include: {
+        addresses: {
+          orderBy: { isDefault: "desc" },
+        },
+        _count: {
+          select: {
+            orders: true,
+            testimonials: true,
+          },
+        },
       },
     });
 
-    return NextResponse.json(updatedUser, { status: 200 });
+    // Remove sensitive information
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...safeUser } = updatedUser;
+
+    return NextResponse.json({
+      success: true,
+      user: safeUser,
+      message: "Profile updated successfully",
+    });
   } catch (error) {
     console.error("Update profile error:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { error: error || "Something went wrong" },
       { status: 500 }
     );
   }
