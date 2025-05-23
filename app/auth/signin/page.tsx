@@ -73,15 +73,15 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-amber-50 p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-2">
-            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
               <span className="text-white font-bold text-xl">G</span>
             </div>
-            <span className="text-2xl font-bold text-orange-600">Gorang</span>
+            <span className="text-2xl font-bold text-green-600">Gorang</span>
           </Link>
           <p className="text-slate-600 mt-2">Welcome back to organic living</p>
         </div>
@@ -203,7 +203,7 @@ export default function SignInPage() {
                   <input
                     id="remember"
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                    className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
                   />
                   <Label htmlFor="remember" className="text-sm">
                     Remember me
@@ -211,7 +211,7 @@ export default function SignInPage() {
                 </div>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-sm text-orange-600 hover:text-orange-500"
+                  className="text-sm text-green-600 hover:text-green-500"
                 >
                   Forgot password?
                 </Link>
@@ -219,7 +219,7 @@ export default function SignInPage() {
 
               <Button
                 type="submit"
-                className="w-full h-11 bg-orange-600 hover:bg-orange-700"
+                className="w-full h-11 bg-green-600 hover:bg-green-700"
                 disabled={isLoading || isGoogleLoading}
               >
                 {isLoading ? (
@@ -239,7 +239,7 @@ export default function SignInPage() {
               Don&apos;t have an account?{" "}
               <Link
                 href="/auth/signup"
-                className="text-orange-600 hover:text-orange-500 font-medium"
+                className="text-green-600 hover:text-green-500 font-medium"
               >
                 Sign up
               </Link>
@@ -251,17 +251,17 @@ export default function SignInPage() {
         <div className="text-center mt-6 space-y-2">
           <Link
             href="/"
-            className="text-sm text-slate-600 hover:text-orange-600 transition-colors"
+            className="text-sm text-slate-600 hover:text-green-600 transition-colors"
           >
             ← Back to Home
           </Link>
           <div className="text-xs text-slate-500">
             By signing in, you agree to our{" "}
-            <Link href="/terms" className="text-orange-600 hover:underline">
+            <Link href="/terms" className="text-green-600 hover:underline">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy" className="text-orange-600 hover:underline">
+            <Link href="/privacy" className="text-green-600 hover:underline">
               Privacy Policy
             </Link>
           </div>

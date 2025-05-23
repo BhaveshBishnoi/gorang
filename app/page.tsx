@@ -23,7 +23,7 @@ export default function HomePage() {
       </Suspense>
 
       {/* Testimonials */}
-      <Suspense fallback={<GrowingPlantLoader  />}>
+      <Suspense fallback={<GrowingPlantLoader />}>
         <Testimonials />
       </Suspense>
 

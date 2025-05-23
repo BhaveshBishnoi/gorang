@@ -82,7 +82,7 @@ export default function CartPage() {
         const data = await response.json();
         setCartItems(data.items || []);
       }
-    } catch  {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to load cart items",
@@ -124,7 +124,7 @@ export default function CartPage() {
           )
         );
       }
-    } catch  {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to update quantity",
@@ -151,7 +151,7 @@ export default function CartPage() {
           description: "Item removed from cart",
         });
       }
-    } catch  {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to remove item",
@@ -184,7 +184,7 @@ export default function CartPage() {
           description: "Item moved to your wishlist",
         });
       }
-    } catch  {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to move to wishlist",
@@ -221,7 +221,7 @@ export default function CartPage() {
           variant: "destructive",
         });
       }
-    } catch  {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to apply promo code",
